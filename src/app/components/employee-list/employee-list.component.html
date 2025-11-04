@@ -1,0 +1,133 @@
+<div class="container-fluid mt-5">
+  <div class="row mb-4">
+    <div class="col-md-8">
+      <h1 class="page-title">
+        <i class="fas fa-users"></i> Employee Management
+      </h1>
+    </div>
+    <div class="col-md-4 text-end">
+      <button class="btn btn-primary btn-lg" (click)="addNewEmployee()">
+        <i class="fas fa-plus"></i> Add Employee
+      </button>
+    </div>
+  </div>
+
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <!-- Search and Filter Section -->
+      <div class="row mb-4">
+        <div class="col-md-6">
+          <div class="input-group">
+            <span class="input-group-text">
+              <i class="fas fa-search"></i>
+            </span>
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Search by name, email, or department..."
+              [(ngModel)]="searchQuery"
+              (keyup)="searchEmployees()"
+            />
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="input-group">
+            <label class="input-group-text">Sort By:</label>
+            <select class="form-select" [(ngModel)]="sortBy" (change)="sortEmployees()">
+              <option value="firstName">First Name</option>
+              <option value="lastName">Last Name</option>
+              <option value="department">Department</option>
+              <option value="position">Position</option>
+              <option value="salary">Salary</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Loading State -->
+      <div *ngIf="loading" class="text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        <p class="mt-2">Loading employees...</p>
+      </div>
+
+      <!-- Error State -->
+      <div *ngIf="error" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="fas fa-exclamation-circle"></i> {{ error }}
+        <button type="button" class="btn-close" (click)="error = ''"></button>
+      </div>
+
+      <!-- Employees Table -->
+      <div *ngIf="!loading && filteredEmployees.length > 0" class="table-responsive">
+        <table class="table table-hover">
+          <thead class="table-dark">
+            <tr>
+              <th><i class="fas fa-id-card"></i> ID</th>
+              <th><i class="fas fa-user"></i> Name</th>
+              <th><i class="fas fa-envelope"></i> Email</th>
+              <th><i class="fas fa-phone"></i> Phone</th>
+              <th><i class="fas fa-briefcase"></i> Department</th>
+              <th><i class="fas fa-tag"></i> Position</th>
+              <th><i class="fas fa-dollar-sign"></i> Salary</th>
+              <th><i class="fas fa-calendar"></i> Hire Date</th>
+              <th><i class="fas fa-toggle-on"></i> Status</th>
+              <th><i class="fas fa-cogs"></i> Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let employee of filteredEmployees">
+              <td><strong>{{ employee.id }}</strong></td>
+              <td>{{ employee.firstName }} {{ employee.lastName }}</td>
+              <td>{{ employee.email }}</td>
+              <td>{{ employee.phone }}</td>
+              <td>{{ employee.department }}</td>
+              <td>{{ employee.position }}</td>
+              <td>{{ employee.salary | currency }}</td>
+              <td>{{ employee.hireDate | date: 'short' }}</td>
+              <td>
+                <span *ngIf="employee.isActive" class="badge bg-success">
+                  <i class="fas fa-check"></i> Active
+                </span>
+                <span *ngIf="!employee.isActive" class="badge bg-danger">
+                  <i class="fas fa-times"></i> Inactive
+                </span>
+              </td>
+              <td>
+                <div class="btn-group" role="group">
+                  <button
+                    class="btn btn-sm btn-info"
+                    (click)="viewEmployee(employee)"
+                    title="View Details"
+                  >
+                    <i class="fas fa-eye"></i>
+                  </button>
+                  <button
+                    class="btn btn-sm btn-warning"
+                    (click)="editEmployee(employee)"
+                    title="Edit"
+                  >
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  <button
+                    class="btn btn-sm btn-danger"
+                    (click)="deleteEmployee(employee.id)"
+                    title="Delete"
+                  >
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Empty State -->
+      <div *ngIf="!loading && filteredEmployees.length === 0" class="text-center py-5">
+        <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+        <p class="text-muted">No employees found. Click "Add Employee" to create one.</p>
+      </div>
+    </div>
+  </div>
+</div>

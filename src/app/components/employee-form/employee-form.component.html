@@ -1,0 +1,209 @@
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-md-8 offset-md-2">
+      <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+          <h2 class="mb-0">
+            <i class="fas" [ngClass]="isEditMode ? 'fa-edit' : 'fa-plus'"></i>
+            {{ isEditMode ? 'Edit Employee' : 'Add New Employee' }}
+          </h2>
+        </div>
+
+        <div class="card-body">
+          <!-- Success Message -->
+          <div *ngIf="success" class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle"></i> {{ success }}
+            <button type="button" class="btn-close" (click)="success = ''"></button>
+          </div>
+
+          <!-- Error Message -->
+          <div *ngIf="error" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-circle"></i> {{ error }}
+            <button type="button" class="btn-close" (click)="error = ''"></button>
+          </div>
+
+          <!-- Loading State -->
+          <div *ngIf="loading" class="text-center py-5">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </div>
+
+          <!-- Form -->
+          <form [formGroup]="employeeForm" (ngSubmit)="onSubmit()" *ngIf="!loading">
+            <div class="row">
+              <!-- First Name -->
+              <div class="col-md-6 mb-3">
+                <label for="firstName" class="form-label">
+                  <i class="fas fa-user"></i> First Name
+                </label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="firstName"
+                  formControlName="firstName"
+                  [class.is-invalid]="employeeForm.get('firstName')?.invalid && employeeForm.get('firstName')?.touched"
+                />
+                <div class="invalid-feedback" *ngIf="employeeForm.get('firstName')?.invalid && employeeForm.get('firstName')?.touched">
+                  {{ getFieldError('firstName') }}
+                </div>
+              </div>
+
+              <!-- Last Name -->
+              <div class="col-md-6 mb-3">
+                <label for="lastName" class="form-label">
+                  <i class="fas fa-user"></i> Last Name
+                </label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="lastName"
+                  formControlName="lastName"
+                  [class.is-invalid]="employeeForm.get('lastName')?.invalid && employeeForm.get('lastName')?.touched"
+                />
+                <div class="invalid-feedback" *ngIf="employeeForm.get('lastName')?.invalid && employeeForm.get('lastName')?.touched">
+                  {{ getFieldError('lastName') }}
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <!-- Email -->
+              <div class="col-md-6 mb-3">
+                <label for="email" class="form-label">
+                  <i class="fas fa-envelope"></i> Email
+                </label>
+                <input
+                  type="email"
+                  class="form-control"
+                  id="email"
+                  formControlName="email"
+                  [class.is-invalid]="employeeForm.get('email')?.invalid && employeeForm.get('email')?.touched"
+                />
+                <div class="invalid-feedback" *ngIf="employeeForm.get('email')?.invalid && employeeForm.get('email')?.touched">
+                  {{ getFieldError('email') }}
+                </div>
+              </div>
+
+              <!-- Phone -->
+              <div class="col-md-6 mb-3">
+                <label for="phone" class="form-label">
+                  <i class="fas fa-phone"></i> Phone
+                </label>
+                <input
+                  type="tel"
+                  class="form-control"
+                  id="phone"
+                  formControlName="phone"
+                  [class.is-invalid]="employeeForm.get('phone')?.invalid && employeeForm.get('phone')?.touched"
+                />
+                <div class="invalid-feedback" *ngIf="employeeForm.get('phone')?.invalid && employeeForm.get('phone')?.touched">
+                  {{ getFieldError('phone') }}
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <!-- Department -->
+              <div class="col-md-6 mb-3">
+                <label for="department" class="form-label">
+                  <i class="fas fa-briefcase"></i> Department
+                </label>
+                <select
+                  class="form-select"
+                  id="department"
+                  formControlName="department"
+                  [class.is-invalid]="employeeForm.get('department')?.invalid && employeeForm.get('department')?.touched"
+                >
+                  <option value="">Select Department</option>
+                  <option *ngFor="let dept of departments" [value]="dept">{{ dept }}</option>
+                </select>
+                <div class="invalid-feedback" *ngIf="employeeForm.get('department')?.invalid && employeeForm.get('department')?.touched">
+                  {{ getFieldError('department') }}
+                </div>
+              </div>
+
+              <!-- Position -->
+              <div class="col-md-6 mb-3">
+                <label for="position" class="form-label">
+                  <i class="fas fa-tag"></i> Position
+                </label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="position"
+                  formControlName="position"
+                  [class.is-invalid]="employeeForm.get('position')?.invalid && employeeForm.get('position')?.touched"
+                />
+                <div class="invalid-feedback" *ngIf="employeeForm.get('position')?.invalid && employeeForm.get('position')?.touched">
+                  {{ getFieldError('position') }}
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <!-- Salary -->
+              <div class="col-md-6 mb-3">
+                <label for="salary" class="form-label">
+                  <i class="fas fa-dollar-sign"></i> Salary
+                </label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="salary"
+                  formControlName="salary"
+                  [class.is-invalid]="employeeForm.get('salary')?.invalid && employeeForm.get('salary')?.touched"
+                />
+                <div class="invalid-feedback" *ngIf="employeeForm.get('salary')?.invalid && employeeForm.get('salary')?.touched">
+                  {{ getFieldError('salary') }}
+                </div>
+              </div>
+
+              <!-- Hire Date -->
+              <div class="col-md-6 mb-3">
+                <label for="hireDate" class="form-label">
+                  <i class="fas fa-calendar"></i> Hire Date
+                </label>
+                <input
+                  type="date"
+                  class="form-control"
+                  id="hireDate"
+                  formControlName="hireDate"
+                  [class.is-invalid]="employeeForm.get('hireDate')?.invalid && employeeForm.get('hireDate')?.touched"
+                />
+                <div class="invalid-feedback" *ngIf="employeeForm.get('hireDate')?.invalid && employeeForm.get('hireDate')?.touched">
+                  {{ getFieldError('hireDate') }}
+                </div>
+              </div>
+            </div>
+
+            <!-- Active Status -->
+            <div class="mb-3">
+              <div class="form-check">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  id="isActive"
+                  formControlName="isActive"
+                />
+                <label class="form-check-label" for="isActive">
+                  <i class="fas fa-toggle-on"></i> Active Status
+                </label>
+              </div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="d-flex gap-2 justify-content-end">
+              <button type="button" class="btn btn-secondary" (click)="cancel()">
+                <i class="fas fa-times"></i> Cancel
+              </button>
+              <button type="submit" class="btn btn-primary" [disabled]="employeeForm.invalid">
+                <i class="fas fa-save"></i> {{ isEditMode ? 'Update' : 'Create' }}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

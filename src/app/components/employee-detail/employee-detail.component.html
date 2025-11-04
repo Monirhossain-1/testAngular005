@@ -1,0 +1,126 @@
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-md-8 offset-md-2">
+      <!-- Back Button -->
+      <button class="btn btn-outline-secondary mb-3" (click)="goBack()">
+        <i class="fas fa-arrow-left"></i> Back to Employees
+      </button>
+
+      <!-- Loading State -->
+      <div *ngIf="loading" class="text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        <p class="mt-2">Loading employee details...</p>
+      </div>
+
+      <!-- Error State -->
+      <div *ngIf="error" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="fas fa-exclamation-circle"></i> {{ error }}
+        <button type="button" class="btn-close" (click)="error = ''"></button>
+      </div>
+
+      <!-- Employee Details -->
+      <div *ngIf="!loading && employee" class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+          <h2 class="mb-0">
+            <i class="fas fa-user-circle"></i> Employee Details
+          </h2>
+        </div>
+
+        <div class="card-body">
+          <div class="row mb-4">
+            <div class="col-md-6">
+              <h3 class="employee-name">
+                {{ employee.firstName }} {{ employee.lastName }}
+              </h3>
+              <p class="text-muted">
+                <i class="fas fa-tag"></i> {{ employee.position }}
+              </p>
+            </div>
+            <div class="col-md-6 text-end">
+              <span *ngIf="employee.isActive" class="badge bg-success badge-lg">
+                <i class="fas fa-check"></i> Active
+              </span>
+              <span *ngIf="!employee.isActive" class="badge bg-danger badge-lg">
+                <i class="fas fa-times"></i> Inactive
+              </span>
+            </div>
+          </div>
+
+          <hr />
+
+          <!-- Contact Information -->
+          <div class="detail-section">
+            <h4 class="section-title">
+              <i class="fas fa-address-card"></i> Contact Information
+            </h4>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="detail-label">Email:</label>
+                <p class="detail-value">
+                  <i class="fas fa-envelope"></i>
+                  <a href="mailto:{{ employee.email }}">{{ employee.email }}</a>
+                </p>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="detail-label">Phone:</label>
+                <p class="detail-value">
+                  <i class="fas fa-phone"></i>
+                  <a href="tel:{{ employee.phone }}">{{ employee.phone }}</a>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Employment Information -->
+          <div class="detail-section">
+            <h4 class="section-title">
+              <i class="fas fa-briefcase"></i> Employment Information
+            </h4>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="detail-label">Department:</label>
+                <p class="detail-value">{{ employee.department }}</p>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="detail-label">Position:</label>
+                <p class="detail-value">{{ employee.position }}</p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="detail-label">Salary:</label>
+                <p class="detail-value salary">{{ employee.salary | currency }}</p>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="detail-label">Hire Date:</label>
+                <p class="detail-value">{{ employee.hireDate | date: 'longDate' }}</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Employee ID -->
+          <div class="detail-section">
+            <label class="detail-label">Employee ID:</label>
+            <p class="detail-value">
+              <span class="badge bg-secondary">{{ employee.id }}</span>
+            </p>
+          </div>
+
+          <hr />
+
+          <!-- Action Buttons -->
+          <div class="d-flex gap-2 justify-content-end">
+            <button class="btn btn-warning" (click)="editEmployee()">
+              <i class="fas fa-edit"></i> Edit
+            </button>
+            <button class="btn btn-danger" (click)="deleteEmployee()">
+              <i class="fas fa-trash"></i> Delete
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
